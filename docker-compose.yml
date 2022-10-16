@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+    php:
+      build:
+          context: .
+          dockerfile: Dockerfile
+      ports:
+          - '8010:80'
+      volumes:
+          - ./src:/var/www/html
+
+    db:
+        image: 'mariadb'
+        restart: always
+        environment:
+            MYSQL_DATABASE: tp_blog
+            MYSQL_ROOT_PASSWORD: root
+        volumes:
+           - ./database/dump.sql:/docker-entrypoint-initdb.d/dump.sql
+
+    phpmyadmin:
+        image: phpmyadmin
+        restart: always
+        ports:
+            - '8145:80'
+        environment:
+            - PMA_ARBITRARY=1
